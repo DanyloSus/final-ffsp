@@ -27,3 +27,4 @@ Route::prefix('/auth')->name('auth.')->group(function () {
 
 Route::apiResource('users', App\Http\Controllers\Api\UserController::class);
 Route::apiResource('products', App\Http\Controllers\Api\ProductController::class);
+Route::apiResource('categories', App\Http\Controllers\Api\CategoryController::class);
