@@ -10,14 +10,14 @@ class Product extends Model
 {
     use HasFactory;
 
-    private $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'description', 'price'];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function categorie(): BelongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }

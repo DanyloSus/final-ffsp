@@ -12,6 +12,13 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $users = \App\Models\User::all();
+        $categories = \App\Models\Category::all();
+
+        foreach ($users as $user) {
+            $randomCategory = $categories->shuffle()->first();
+
+            \App\Models\Product::factory()->for($user)->for($randomCategory)->create();
+        }
     }
 }

@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Category;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,11 +15,12 @@ return new class extends Migration {
 
             $table->string('name');
             $table->text('description')->nullable();
-
-            $table->foreignIdFor(Category::class);
-            $table->foreignIdFor(User::class);
+            $table->integer('price');
 
             $table->timestamps();
+
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
         });
     }
 
