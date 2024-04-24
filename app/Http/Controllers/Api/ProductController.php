@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 
 class ProductController extends Controller
@@ -19,7 +20,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::all();
+        return ProductResource::collection(Product::all());
     }
 
     /**
@@ -37,7 +38,7 @@ class ProductController extends Controller
         $product->user_id = $request->user()->id;
         $product->save();
 
-        return $product;
+        return new ProductResource($product);
     }
 
     /**
@@ -45,7 +46,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return $product;
+        return new ProductResource($product);
     }
 
     /**
@@ -62,7 +63,7 @@ class ProductController extends Controller
             ])
         );
 
-        return $product;
+        return new ProductResource($product);
     }
 
     /**

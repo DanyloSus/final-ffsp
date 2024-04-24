@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -20,7 +21,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        return UserResource::collection(User::all());
     }
 
     /**
@@ -28,7 +29,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        return User::create($request->validated());
+        return new UserResource(User::create($request->validated()));
     }
 
     /**
@@ -36,7 +37,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return $user;
+        return new UserResource($user);
     }
 
     /**
@@ -51,7 +52,7 @@ class UserController extends Controller
             ])
         );
 
-        return $user;
+        return new UserResource($user);
     }
 
     /**
