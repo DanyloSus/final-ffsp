@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
+use App\Http\Traits\CanLoadRelationships;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    use CanLoadRelationships;
+
+    private array $relations = ['products'];
+
     public function __construct()
     {
         $this->middleware('auth:sanctum')->only(['store', 'update', 'destroy']);
@@ -19,7 +24,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return CategoryResource::collection(Category::all());
+        return CategoryResource::collection($this->loadRelationships(Category::query())->get());
     }
 
     /**
@@ -31,7 +36,7 @@ class CategoryController extends Controller
             'title' => 'required|max:255',
         ]));
 
-        return new CategoryResource($category);
+        return new CategoryResource($this->loadRelationships($category));
     }
 
     /**
@@ -39,7 +44,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return new CategoryResource($category);
+        return new CategoryResource($this->loadRelationships($category));
     }
 
     /**
@@ -51,7 +56,7 @@ class CategoryController extends Controller
             'title' => 'sometimes|max:255',
         ]));
 
-        return new CategoryResource($category);
+        return new CategoryResource($this->loadRelationships($category));
     }
 
     /**

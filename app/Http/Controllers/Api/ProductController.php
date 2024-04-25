@@ -4,12 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Http\Traits\CanLoadRelationships;
 use Illuminate\Http\Request;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 
 class ProductController extends Controller
 {
+    use CanLoadRelationships;
+
+    private array $relations = ['user', 'category'];
+
     public function __construct()
     {
         $this->middleware('auth:sanctum')->only(['store', 'update', 'destroy']);
@@ -20,7 +25,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return ProductResource::collection(Product::all());
+        return ProductResource::collection($this->loadRelationships(Product::query())->get());
     }
 
     /**
@@ -38,7 +43,7 @@ class ProductController extends Controller
         $product->user_id = $request->user()->id;
         $product->save();
 
-        return new ProductResource($product);
+        return new ProductResource($this->loadRelationships($product));
     }
 
     /**
@@ -46,7 +51,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return new ProductResource($product);
+        return new ProductResource($this->loadRelationships($product));
     }
 
     /**
@@ -63,7 +68,7 @@ class ProductController extends Controller
             ])
         );
 
-        return new ProductResource($product);
+        return new ProductResource($this->loadRelationships($product));
     }
 
     /**
