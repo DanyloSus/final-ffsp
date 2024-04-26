@@ -59,6 +59,12 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        if ($request->user()->id != $product->user->id) {
+            return response()->json([
+                'message' => 'Unauthenticated.',
+            ], 401);
+        }
+
         $product->update(
             $request->validate([
                 'name' => 'sometimes|string|max:50',
@@ -74,8 +80,14 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Request $request, Product $product)
     {
+        if ($request->user()->id != $product->user->id) {
+            return response()->json([
+                'message' => 'Unauthenticated.',
+            ], 401);
+        }
+
         $product->delete();
 
         return response(status: 204);

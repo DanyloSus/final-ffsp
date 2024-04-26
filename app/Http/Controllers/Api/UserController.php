@@ -13,7 +13,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->only(['update', 'destroy']);
+        $this->middleware('auth:sanctum')->only(['show', 'update', 'destroy']);
     }
 
     /**
@@ -35,8 +35,14 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(Request $request, User $user)
     {
+        if ($request->user()->id != $user->id) {
+            return response()->json([
+                'message' => 'Unauthenticated.'
+            ], 401);
+        }
+
         return new UserResource($user);
     }
 
@@ -45,6 +51,12 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        if ($request->user()->id != $user->id) {
+            return response()->json([
+                'message' => 'Unauthenticated.'
+            ], 401);
+        }
+
         $user->update(
             $request->validate([
                 'name' => 'sometimes|string|max:255',
@@ -58,8 +70,14 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
+        if ($request->user()->id != $user->id) {
+            return response()->json([
+                'message' => 'Unauthenticated.'
+            ], 401);
+        }
+
         $user->delete();
 
         return response(status: 204);
