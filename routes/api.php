@@ -20,11 +20,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('/auth')->name('auth.')->group(function () {
+    Route::post('/register', [AuthController::class, 'register'])->name('register');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
 });
 
 
-Route::apiResource('users', App\Http\Controllers\Api\UserController::class);
+Route::apiResource('users', App\Http\Controllers\Api\UserController::class)->except(['store']);
 Route::apiResource('products', App\Http\Controllers\Api\ProductController::class);
 Route::apiResource('categories', App\Http\Controllers\Api\CategoryController::class);

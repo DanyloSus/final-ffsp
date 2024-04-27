@@ -3,12 +3,22 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    public function register(UserRequest $request)
+    {
+        return new \App\Http\Resources\UserResource(
+            \App\Models\User::create(
+                $request->validated()
+            )
+        );
+    }
+
     public function login(Request $request)
     {
         $request->validate([
